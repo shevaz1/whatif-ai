@@ -1,62 +1,73 @@
-import { closeView, graniteEvent } from '@apps-in-toss/web-framework';
-import { useEffect, useRef } from 'react';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import FeaturePage from '@/pages/Feature';
-import HomePage from '@/pages/Home';
-import NotFoundPage from '@/pages/NotFound';
-import SettingsPage from '@/pages/Settings';
+import { closeView, graniteEvent } from "@apps-in-toss/web-framework";
+import { useEffect, useRef } from "react";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import ArchivePage from "@/pages/Archive";
+import HomePage from "@/pages/Home";
+import MyPage from "@/pages/My";
+import NotFoundPage from "@/pages/NotFound";
+import ResultPage from "@/pages/Result";
+import SimulatePage from "@/pages/Simulate";
 
 export default function App() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const pathStackRef = useRef<string[]>([location.pathname || '/']);
+	const location = useLocation();
+	const navigate = useNavigate();
+	const pathStackRef = useRef<string[]>([location.pathname || "/"]);
 
-  useEffect(() => {
-    const currentPath = location.pathname || '/';
-    const stack = pathStackRef.current;
-    const top = stack[stack.length - 1];
+	useEffect(() => {
+		const currentPath = location.pathname || "/";
+		const stack = pathStackRef.current;
+		const top = stack[stack.length - 1];
 
-    if (top !== currentPath) {
-      stack.push(currentPath);
-    }
-  }, [location.pathname]);
+		if (top !== currentPath) {
+			stack.push(currentPath);
+		}
+	}, [location.pathname]);
 
-  useEffect(() => {
-    const subscription = graniteEvent.addEventListener('backEvent', {
-      onEvent: () => {
-        const stack = pathStackRef.current;
-        if (stack.length <= 1) {
-          closeView();
-          return;
-        }
+	useEffect(() => {
+		const webViewWindow = window as typeof window & {
+			ReactNativeWebView?: unknown;
+		};
+		if (!webViewWindow.ReactNativeWebView) {
+			return undefined;
+		}
 
-        // 현재 화면 pop 후 이전 화면으로 이동 (브라우저 히스토리 의존 제거)
-        stack.pop();
-        const previousPath = stack[stack.length - 1] || '/';
-        navigate(previousPath, { replace: true });
-      },
-      onError: (error) => console.error('backEvent error:', error),
-    });
+		const subscription = graniteEvent.addEventListener("backEvent", {
+			onEvent: () => {
+				const stack = pathStackRef.current;
+				if (stack.length <= 1) {
+					closeView();
+					return;
+				}
 
-    return () => {
-      const cleanup = subscription as unknown;
+				// 현재 화면 pop 후 이전 화면으로 이동 (브라우저 히스토리 의존 제거)
+				stack.pop();
+				const previousPath = stack[stack.length - 1] || "/";
+				navigate(previousPath, { replace: true });
+			},
+			onError: (error) => console.error("backEvent error:", error),
+		});
 
-      if (typeof cleanup === 'function') {
-        cleanup();
-        return;
-      }
+		return () => {
+			const cleanup = subscription as unknown;
 
-      const removable = cleanup as { remove?: () => void } | null;
-      if (removable?.remove) removable.remove();
-    };
-  }, [navigate]);
+			if (typeof cleanup === "function") {
+				cleanup();
+				return;
+			}
 
-  return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/feature" element={<FeaturePage />} />
-      <Route path="/settings" element={<SettingsPage />} />
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
-  );
+			const removable = cleanup as { remove?: () => void } | null;
+			if (removable?.remove) removable.remove();
+		};
+	}, [navigate]);
+
+	return (
+		<Routes>
+			<Route path="/" element={<HomePage />} />
+			<Route path="/simulate" element={<SimulatePage />} />
+			<Route path="/result" element={<ResultPage />} />
+			<Route path="/archive" element={<ArchivePage />} />
+			<Route path="/my" element={<MyPage />} />
+			<Route path="*" element={<NotFoundPage />} />
+		</Routes>
+	);
 }
