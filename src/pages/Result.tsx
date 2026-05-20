@@ -1,5 +1,6 @@
 import { Button, Paragraph } from "@toss/tds-mobile";
 import type { CSSProperties } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
 import PageHeader from "@/components/PageHeader";
@@ -118,7 +119,9 @@ const rankColors = {
 
 export default function ResultPage() {
 	const navigate = useNavigate();
-	const { snapshot } = useWhatIf();
+	const { snapshot, retry } = useWhatIf();
+	const [isRetrying, setIsRetrying] = useState(false);
+	const [retryError, setRetryError] = useState("");
 	const result = snapshot.todayResult;
 
 	if (!result) {
@@ -148,6 +151,27 @@ export default function ResultPage() {
 			</AppLayout>
 		);
 	}
+
+	const retryCount = Math.max((result.attempt ?? 1) - 1, 0);
+	const submitRetry = async () => {
+		if (isRetrying) {
+			return;
+		}
+
+		setIsRetrying(true);
+		setRetryError("");
+		try {
+			await retry(result.question);
+		} catch (error) {
+			setRetryError(
+				error instanceof Error
+					? error.message
+					: "재도전 카드 생성에 실패했어요.",
+			);
+		} finally {
+			setIsRetrying(false);
+		}
+	};
 
 	return (
 		<AppLayout>
@@ -182,6 +206,16 @@ export default function ResultPage() {
 					</div>
 					<span style={styles.softBadge}>오늘 1회 완료</span>
 				</div>
+				<Paragraph
+					typography="t7"
+					fontWeight="bold"
+					color="#4E5968"
+					style={{ marginTop: spacing.lg }}
+				>
+					<Paragraph.Text>
+						재도전 {retryCount}회 · 테스트에서는 누를수록 최소 등급이 올라가요.
+					</Paragraph.Text>
+				</Paragraph>
 				<div style={styles.rankStack}>
 					{(["N", "R", "SR", "SSR"] as const).map((rarity) => {
 						const active = result.rarity === rarity;
@@ -205,12 +239,22 @@ export default function ResultPage() {
 					<Button
 						size="large"
 						color="primary"
-						variant="weak"
+						variant="fill"
 						display="block"
-						disabled
+						disabled={isRetrying || result.rarity === "SSR"}
+						onClick={submitRetry}
 					>
-						광고 보고 높은 등급 재도전 준비중
+						{result.rarity === "SSR"
+							? "최고 부적 달성"
+							: isRetrying
+								? "부적 다시 뽑는 중"
+								: "테스트로 더 강한 부적 뽑기"}
 					</Button>
+					{retryError ? (
+						<Paragraph typography="t7" color="#E11D48">
+							<Paragraph.Text>{retryError}</Paragraph.Text>
+						</Paragraph>
+					) : null}
 				</div>
 			</section>
 

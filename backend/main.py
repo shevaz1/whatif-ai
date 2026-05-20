@@ -23,6 +23,6 @@ def health() -> dict[str, str]:
 @app.post("/simulate", response_model=SimulationResponse)
 def create_simulation(payload: SimulationRequest) -> SimulationResponse:
     try:
-        return simulate(payload.question.strip())
+        return simulate(payload.question.strip(), payload.retryCount)
     except RuntimeError as error:
         raise HTTPException(status_code=503, detail=str(error)) from error

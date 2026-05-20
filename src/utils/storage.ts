@@ -91,6 +91,7 @@ export function createTodaySimulation(
 		id: `${today}-${Date.now()}`,
 		date: today,
 		createdAt: new Date().toISOString(),
+		attempt: 1,
 	};
 	const previousDate = state.attendance.lastUsedDate;
 	const nextStreak =
@@ -102,6 +103,36 @@ export function createTodaySimulation(
 			bestStreak: Math.max(state.attendance.bestStreak, nextStreak),
 			lastUsedDate: today,
 		},
+	};
+
+	saveWhatIfState(nextState);
+	return nextState;
+}
+
+export function getTodayAttemptCount(question: string): number {
+	const state = loadWhatIfState();
+	const today = getTodayKey();
+	return state.results.filter(
+		(result) => result.date === today && result.question === question,
+	).length;
+}
+
+export function createRetrySimulation(
+	resultDraft: SimulationDraft,
+	attempt: number,
+): WhatIfState {
+	const state = loadWhatIfState();
+	const today = getTodayKey();
+	const result: SimulationResult = {
+		...resultDraft,
+		id: `${today}-${Date.now()}`,
+		date: today,
+		createdAt: new Date().toISOString(),
+		attempt,
+	};
+	const nextState: WhatIfState = {
+		...state,
+		results: [result, ...state.results],
 	};
 
 	saveWhatIfState(nextState);

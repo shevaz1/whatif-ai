@@ -30,6 +30,7 @@ export interface SimulationResult {
 	futureSimulation: string;
 	rareEnding: string;
 	createdAt: string;
+	attempt?: number;
 }
 
 export type SimulationDraft = Omit<

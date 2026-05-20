@@ -77,6 +77,21 @@ const styles = {
 		marginBottom: spacing.lg,
 		position: "relative",
 	} as CSSProperties,
+	topBadges: {
+		display: "flex",
+		alignItems: "center",
+		gap: spacing.xs,
+		flexShrink: 0,
+	} as CSSProperties,
+	attemptBadge: {
+		borderRadius: radius.full,
+		padding: `${spacing.xxs}px ${spacing.sm}px`,
+		backgroundColor: "rgba(255, 255, 255, 0.72)",
+		color: "#4E5968",
+		fontSize: 13,
+		fontWeight: 800,
+		whiteSpace: "nowrap",
+	} as CSSProperties,
 	symbol: {
 		width: 92,
 		height: 92,
@@ -173,7 +188,12 @@ export default function SimulationCard({
 						{formatKoreanDate(result.date)} 시뮬레이션
 					</Paragraph.Text>
 				</Paragraph>
-				<RarityBadge rarity={result.rarity} />
+				<div style={styles.topBadges}>
+					{result.attempt && result.attempt > 1 ? (
+						<span style={styles.attemptBadge}>{result.attempt}회차</span>
+					) : null}
+					<RarityBadge rarity={result.rarity} />
+				</div>
 			</div>
 
 			<div style={{ ...styles.symbol, backgroundColor: meta.color }}>

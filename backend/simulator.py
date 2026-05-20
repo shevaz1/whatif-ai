@@ -38,8 +38,8 @@ RARE_ENDINGS = [
 ]
 
 
-def _seed(question: str) -> int:
-    digest = sha256(question.encode("utf-8")).hexdigest()
+def _seed(question: str, retry_count: int = 0) -> int:
+    digest = sha256(f"{question}:{retry_count}".encode("utf-8")).hexdigest()
     return int(digest[:12], 16)
 
 
@@ -53,17 +53,24 @@ def _pick_rarity(seed: int) -> str:
     return "N"
 
 
-def simulate(question: str) -> SimulationResponse:
+def _boost_rarity_for_retry(rarity: str, retry_count: int) -> str:
+    order = ["N", "R", "SR", "SSR"]
+    minimum_index = min(retry_count, len(order) - 1)
+    current_index = order.index(rarity)
+    return order[max(current_index, minimum_index)]
+
+
+def simulate(question: str, retry_count: int = 0) -> SimulationResponse:
     if os.getenv("OPENAI_API_KEY"):
-        return simulate_with_openai(question)
+        return simulate_with_openai(question, retry_count)
 
     if os.getenv("ALLOW_LOCAL_SIMULATION_FALLBACK") == "true":
-        return simulate_locally(question)
+        return simulate_locally(question, retry_count)
 
     raise RuntimeError("OPENAI_API_KEY is required for AI simulation")
 
 
-def simulate_with_openai(question: str) -> SimulationResponse:
+def simulate_with_openai(question: str, retry_count: int = 0) -> SimulationResponse:
     client = OpenAI()
     model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
@@ -84,6 +91,7 @@ def simulate_with_openai(question: str) -> SimulationResponse:
                 "role": "user",
                 "content": (
                     f"질문: {question}\n\n"
+                    f"재도전 횟수: {retry_count}회\n"
                     "성공확률과 위험도는 0~100 정수로 작성해. "
                     "rarity는 N, R, SR, SSR 중 하나로 고르고, "
                     "endingId는 rarity에 맞게 N=quiet-win, R=plot-twist, "
@@ -118,9 +126,9 @@ def normalize_response(result: SimulationResponse, question: str) -> SimulationR
     )
 
 
-def simulate_locally(question: str) -> SimulationResponse:
-    seed = _seed(question)
-    rarity = _pick_rarity(seed)
+def simulate_locally(question: str, retry_count: int = 0) -> SimulationResponse:
+    seed = _seed(question, retry_count)
+    rarity = _boost_rarity_for_retry(_pick_rarity(seed), retry_count)
     ending_id, ending_title, ending_description = ENDING_BY_RARITY[rarity]
     success_base = {"N": 38, "R": 54, "SR": 68, "SSR": 82}[rarity]
     risk_base = {"N": 28, "R": 42, "SR": 58, "SSR": 44}[rarity]
