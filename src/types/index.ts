@@ -32,6 +32,11 @@ export interface SimulationResult {
 	createdAt: string;
 }
 
+export type SimulationDraft = Omit<
+	SimulationResult,
+	"id" | "date" | "createdAt"
+>;
+
 export interface AttendanceState {
 	streak: number;
 	bestStreak: number;

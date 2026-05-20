@@ -1,8 +1,8 @@
-# 오늘의 인생 선택지
+# 인생선택
 
 Apps in Toss WebView 기반 AI 미니앱 MVP입니다.
 
-사용자가 오늘 하고 싶은 선택을 입력하면 성공확률, 위험도, 미래 시뮬레이션, 희귀 엔딩, 등급을 카드 형태로 보여줍니다. 현재 프론트 MVP는 localStorage 기반 랜덤 생성이며, FastAPI 백엔드로 교체할 수 있게 구조를 분리했습니다.
+사용자가 오늘 하고 싶은 선택을 입력하면 OpenAI 기반 FastAPI 백엔드가 성공확률, 위험도, 미래 시뮬레이션, 희귀 엔딩, 등급을 카드 형태로 생성합니다. 결과와 출석 정보는 MVP 기준 localStorage에 저장합니다.
 
 ## 실행
 
@@ -10,6 +10,27 @@ Apps in Toss WebView 기반 AI 미니앱 MVP입니다.
 npm install
 npm run dev
 ```
+
+프론트에서 AI 백엔드를 호출하려면 환경변수가 필요합니다.
+
+```bash
+VITE_API_BASE_URL=http://localhost:8000 npm run dev
+```
+
+## 백엔드 실행
+
+```bash
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+OPENAI_API_KEY=sk-... uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+선택 환경변수:
+
+- `OPENAI_MODEL`: 기본값 `gpt-4o-mini`
+- `ALLOW_LOCAL_SIMULATION_FALLBACK=true`: OpenAI 키 없이 개발용 로컬 시뮬레이션 허용
 
 ## 빌드
 
@@ -23,12 +44,12 @@ npm run build
 
 - 질문 입력
 - 하루 1회 사용 제한
-- 랜덤 미래 결과 생성
+- AI 미래 결과 생성
 - 성공확률 / 위험도 계산
 - 등급 `N`, `R`, `SR`, `SSR`
 - 희귀 엔딩
 - 엔딩 도감
-- 출석 streak
+- 연속 출석
 - 결과 저장
 - 공유용 카드 UI
 
@@ -46,13 +67,13 @@ npm run build
 - `src/components`: 카드, 배지, 네비게이션 등 공통 UI
 - `src/data`: 엔딩/문구/등급 데이터
 - `src/hooks`: 앱 상태 hook
-- `src/utils`: 랜덤 생성, 날짜, localStorage 저장소
+- `src/utils`: API 호출, 날짜, localStorage 저장소
 - `src/types`: 도메인 타입
 
 ## 백엔드 구조
 
 - `backend/main.py`: FastAPI 앱
 - `backend/schemas.py`: 요청/응답 스키마
-- `backend/simulator.py`: MVP 시뮬레이션 생성 로직
+- `backend/simulator.py`: OpenAI 기반 시뮬레이션 생성 로직
 
-백엔드 연동 시 프론트의 `src/utils/random.ts`와 `src/utils/storage.ts`에서 결과 생성 부분을 API 호출로 교체하면 됩니다.
+프론트는 `src/utils/api.ts`에서 백엔드 `/simulate`를 호출합니다.

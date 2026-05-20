@@ -1,13 +1,13 @@
 import type {
 	AttendanceState,
+	SimulationDraft,
 	SimulationResult,
 	WhatIfSnapshot,
 	WhatIfState,
 } from "@/types";
 import { getTodayKey, getYesterdayKey } from "@/utils/date";
-import { createSimulationResult } from "@/utils/random";
 
-const STORAGE_KEY = "today-life-choice-v1";
+const STORAGE_KEY = "whatif-ai-v1";
 
 const defaultAttendance: AttendanceState = {
 	streak: 0,
@@ -75,7 +75,9 @@ export function getWhatIfSnapshot(): WhatIfSnapshot {
 	};
 }
 
-export function createTodaySimulation(question: string): WhatIfState {
+export function createTodaySimulation(
+	resultDraft: SimulationDraft,
+): WhatIfState {
 	const state = loadWhatIfState();
 	const today = getTodayKey();
 	const existing = state.results.find((result) => result.date === today);
@@ -84,7 +86,12 @@ export function createTodaySimulation(question: string): WhatIfState {
 		return state;
 	}
 
-	const result: SimulationResult = createSimulationResult(question);
+	const result: SimulationResult = {
+		...resultDraft,
+		id: `${today}-${Date.now()}`,
+		date: today,
+		createdAt: new Date().toISOString(),
+	};
 	const previousDate = state.attendance.lastUsedDate;
 	const nextStreak =
 		previousDate === getYesterdayKey() ? state.attendance.streak + 1 : 1;

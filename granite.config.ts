@@ -1,9 +1,9 @@
 import { defineConfig } from "@apps-in-toss/web-framework/config";
 
 export default defineConfig({
-	appName: "today-life-choice",
+	appName: "whatif-ai",
 	brand: {
-		displayName: "오늘의 인생 선택지",
+		displayName: "인생선택",
 		primaryColor: "#3182F6",
 		icon: "",
 	},

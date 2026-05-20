@@ -126,7 +126,7 @@ export default function SimulationCard({
 
 			{shareMode ? (
 				<Paragraph typography="t7" fontWeight="bold" style={styles.brand}>
-					<Paragraph.Text>오늘의 인생 선택지에서 뽑은 미래 카드</Paragraph.Text>
+					<Paragraph.Text>인생선택에서 뽑은 미래 카드</Paragraph.Text>
 				</Paragraph>
 			) : null}
 		</section>

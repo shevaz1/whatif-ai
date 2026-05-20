@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import type { WhatIfSnapshot } from "@/types";
+import { requestAiSimulation } from "@/utils/api";
 import {
 	clearWhatIfState,
 	createTodaySimulation,
@@ -15,8 +16,9 @@ export function useWhatIf() {
 		setSnapshot(getWhatIfSnapshot());
 	}, []);
 
-	const simulate = useCallback((question: string) => {
-		createTodaySimulation(question);
+	const simulate = useCallback(async (question: string) => {
+		const resultDraft = await requestAiSimulation(question);
+		createTodaySimulation(resultDraft);
 		setSnapshot(getWhatIfSnapshot());
 	}, []);
 

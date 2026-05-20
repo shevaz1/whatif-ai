@@ -45,6 +45,8 @@ export default function SimulatePage() {
 	const navigate = useNavigate();
 	const { snapshot, simulate } = useWhatIf();
 	const [question, setQuestion] = useState("");
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [errorMessage, setErrorMessage] = useState("");
 	const normalized = question.trim();
 
 	useEffect(() => {
@@ -54,13 +56,26 @@ export default function SimulatePage() {
 	}, [navigate, snapshot.canSimulateToday]);
 
 	const submit = async () => {
-		if (normalized.length < 2) {
+		if (normalized.length < 2 || isSubmitting) {
 			return;
 		}
 
-		simulate(normalized.endsWith("?") ? normalized : `${normalized}?`);
-		await generateHapticFeedback({ type: "success" }).catch(() => undefined);
-		navigate("/result", { replace: true });
+		setIsSubmitting(true);
+		setErrorMessage("");
+
+		try {
+			await simulate(normalized.endsWith("?") ? normalized : `${normalized}?`);
+			await generateHapticFeedback({ type: "success" }).catch(() => undefined);
+			navigate("/result", { replace: true });
+		} catch (error) {
+			setErrorMessage(
+				error instanceof Error
+					? error.message
+					: "AI 시뮬레이션 생성에 실패했어요.",
+			);
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
 	return (
@@ -87,6 +102,15 @@ export default function SimulatePage() {
 						{normalized.length}/40 · 결과는 이 기기에 저장됩니다.
 					</Paragraph.Text>
 				</Paragraph>
+				{errorMessage ? (
+					<Paragraph
+						typography="t7"
+						color="#E11D48"
+						style={{ marginTop: spacing.sm }}
+					>
+						<Paragraph.Text>{errorMessage}</Paragraph.Text>
+					</Paragraph>
+				) : null}
 				<div style={styles.examples}>
 					{examplePrompts.slice(0, 4).map((prompt) => (
 						<Button
@@ -106,10 +130,10 @@ export default function SimulatePage() {
 						color="primary"
 						variant="fill"
 						display="block"
-						disabled={normalized.length < 2}
+						disabled={normalized.length < 2 || isSubmitting}
 						onClick={submit}
 					>
-						미래 뽑기
+						{isSubmitting ? "AI가 미래 보는 중" : "미래 뽑기"}
 					</Button>
 				</div>
 			</section>

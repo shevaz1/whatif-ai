@@ -57,7 +57,7 @@ export default function HomePage() {
 		<AppLayout>
 			<section style={styles.hero}>
 				<Paragraph typography="t4" fontWeight="bold" color="#191F28">
-					<Paragraph.Text>오늘의 인생 선택지</Paragraph.Text>
+					<Paragraph.Text>인생선택</Paragraph.Text>
 				</Paragraph>
 				<Paragraph typography="t7" style={styles.subtitle}>
 					<Paragraph.Text>

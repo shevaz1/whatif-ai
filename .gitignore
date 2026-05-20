@@ -4,3 +4,7 @@ dist/
 *.ait
 __pycache__/
 .venv/
+.env
+backend/.env
+.DS_Store
+assets/console/.tmp/

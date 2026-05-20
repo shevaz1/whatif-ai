@@ -1,10 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from schemas import SimulationRequest, SimulationResponse
 from simulator import simulate
 
-app = FastAPI(title="오늘의 인생 선택지 API")
+app = FastAPI(title="인생선택 API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -22,4 +22,7 @@ def health() -> dict[str, str]:
 
 @app.post("/simulate", response_model=SimulationResponse)
 def create_simulation(payload: SimulationRequest) -> SimulationResponse:
-    return simulate(payload.question.strip())
+    try:
+        return simulate(payload.question.strip())
+    except RuntimeError as error:
+        raise HTTPException(status_code=503, detail=str(error)) from error
