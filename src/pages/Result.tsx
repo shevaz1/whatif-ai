@@ -15,12 +15,6 @@ const styles = {
 		padding: spacing.xl,
 		backgroundColor: "#F9FAFB",
 	} as CSSProperties,
-	section: {
-		borderRadius: radius.xl,
-		padding: spacing.lg,
-		backgroundColor: "#F9FAFB",
-		marginTop: spacing.lg,
-	} as CSSProperties,
 	nextGoal: {
 		border: "1px solid #E5E8EB",
 		borderRadius: radius.xxl,
@@ -100,14 +94,6 @@ const styles = {
 		gap: spacing.sm,
 		marginTop: spacing.xl,
 	} as CSSProperties,
-	sharePreview: {
-		border: "1px dashed #D1D6DB",
-		borderRadius: radius.xxl,
-		padding: spacing.sm,
-		marginTop: spacing.xl,
-		backgroundColor: "#FFFFFF",
-	} as CSSProperties,
-	shareLabel: { color: "#6B7684", marginBottom: spacing.sm } as CSSProperties,
 };
 
 const rankColors = {
@@ -259,32 +245,6 @@ export default function ResultPage() {
 				</div>
 			</section>
 
-			<section style={styles.section}>
-				<Paragraph typography="t6" fontWeight="bold" color="#191F28">
-					<Paragraph.Text>인생 시뮬레이션</Paragraph.Text>
-				</Paragraph>
-				<Paragraph
-					typography="t7"
-					color="#4E5968"
-					style={{ marginTop: spacing.xs }}
-				>
-					<Paragraph.Text>{result.futureSimulation}</Paragraph.Text>
-				</Paragraph>
-			</section>
-
-			<section style={styles.section}>
-				<Paragraph typography="t6" fontWeight="bold" color="#191F28">
-					<Paragraph.Text>희귀 엔딩</Paragraph.Text>
-				</Paragraph>
-				<Paragraph
-					typography="t7"
-					color="#4E5968"
-					style={{ marginTop: spacing.xs }}
-				>
-					<Paragraph.Text>{result.rareEnding}</Paragraph.Text>
-				</Paragraph>
-			</section>
-
 			<section style={styles.locked}>
 				<div style={styles.lockedHeader}>
 					<Paragraph typography="t6" fontWeight="bold" color="#191F28">
@@ -327,13 +287,6 @@ export default function ResultPage() {
 						자리입니다.
 					</Paragraph.Text>
 				</Paragraph>
-			</section>
-
-			<section style={styles.sharePreview}>
-				<Paragraph typography="t7" fontWeight="bold" style={styles.shareLabel}>
-					<Paragraph.Text>공유용 부적 카드</Paragraph.Text>
-				</Paragraph>
-				<SimulationCard result={result} shareMode />
 			</section>
 
 			<div style={styles.actions}>

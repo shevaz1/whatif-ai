@@ -116,6 +116,31 @@ const styles = {
 	catchphrase: { marginBottom: spacing.lg } as CSSProperties,
 	title: { marginBottom: spacing.sm } as CSSProperties,
 	description: { color: "#4E5968", marginTop: spacing.md } as CSSProperties,
+	simulationBox: {
+		borderRadius: radius.xl,
+		padding: spacing.lg,
+		marginTop: spacing.xl,
+		backgroundColor: "#FFFFFF",
+		border: "1px solid rgba(25, 31, 40, 0.08)",
+		boxShadow: "0 8px 20px rgba(15, 23, 42, 0.04)",
+	} as CSSProperties,
+	simulationText: {
+		color: "#333D4B",
+		marginTop: spacing.xs,
+		lineHeight: 1.55,
+	} as CSSProperties,
+	endingBox: {
+		borderRadius: radius.lg,
+		padding: spacing.md,
+		marginTop: spacing.sm,
+		backgroundColor: "rgba(255, 255, 255, 0.72)",
+		border: "1px solid rgba(25, 31, 40, 0.06)",
+	} as CSSProperties,
+	endingText: {
+		color: "#4E5968",
+		marginTop: spacing.xs,
+		lineHeight: 1.5,
+	} as CSSProperties,
 	meterGrid: {
 		display: "grid",
 		gridTemplateColumns: "repeat(2, 1fr)",
@@ -153,22 +178,13 @@ const styles = {
 		color: "#6B7684",
 		marginTop: spacing.sm,
 	} as CSSProperties,
-	brand: {
-		color: "#6B7684",
-		marginTop: spacing.xl,
-		textAlign: "center",
-	} as CSSProperties,
 };
 
 interface SimulationCardProps {
 	result: SimulationResult;
-	shareMode?: boolean;
 }
 
-export default function SimulationCard({
-	result,
-	shareMode = false,
-}: SimulationCardProps) {
+export default function SimulationCard({ result }: SimulationCardProps) {
 	const meta = rarityMeta[result.rarity];
 
 	return (
@@ -176,7 +192,6 @@ export default function SimulationCard({
 			style={{
 				...styles.card,
 				background: `linear-gradient(180deg, ${meta.softColor} 0%, #FFFFFF 68%)`,
-				minHeight: shareMode ? 460 : undefined,
 			}}
 			aria-label={`${result.question} 행운 부적 카드`}
 		>
@@ -230,6 +245,24 @@ export default function SimulationCard({
 			<Paragraph typography="t7" style={styles.description}>
 				<Paragraph.Text>{result.summary}</Paragraph.Text>
 			</Paragraph>
+
+			<div style={styles.simulationBox}>
+				<Paragraph typography="t6" fontWeight="bold" color="#191F28">
+					<Paragraph.Text>인생 시뮬레이션</Paragraph.Text>
+				</Paragraph>
+				<Paragraph typography="t7" style={styles.simulationText}>
+					<Paragraph.Text>{result.futureSimulation}</Paragraph.Text>
+				</Paragraph>
+			</div>
+
+			<div style={styles.endingBox}>
+				<Paragraph typography="t7" fontWeight="bold" color={meta.deepColor}>
+					<Paragraph.Text>희귀 엔딩</Paragraph.Text>
+				</Paragraph>
+				<Paragraph typography="t7" style={styles.endingText}>
+					<Paragraph.Text>{result.rareEnding}</Paragraph.Text>
+				</Paragraph>
+			</div>
 
 			<div style={styles.meterGrid}>
 				<div style={styles.meter}>
@@ -285,12 +318,6 @@ export default function SimulationCard({
 					등급이 높을수록 더 좋은 미래가 시뮬레이션돼요.
 				</Paragraph.Text>
 			</Paragraph>
-
-			{shareMode ? (
-				<Paragraph typography="t7" fontWeight="bold" style={styles.brand}>
-					<Paragraph.Text>인생선택에서 뽑은 오늘의 행운 부적</Paragraph.Text>
-				</Paragraph>
-			) : null}
 		</section>
 	);
 }
