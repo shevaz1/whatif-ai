@@ -51,14 +51,14 @@ export default function ArchivePage() {
 	return (
 		<AppLayout>
 			<PageHeader
-				title="엔딩 도감"
-				subtitle="뽑은 결과와 아직 못 본 희귀 엔딩을 확인해요."
+				title="행운 부적함"
+				subtitle="뽑은 부적과 아직 못 본 희귀 징조를 확인해요."
 			/>
 
 			{hasSsr ? null : (
 				<section style={styles.lockedSsr}>
 					<Paragraph typography="t6" fontWeight="bold" color="#191F28">
-						<Paragraph.Text>SSR 엔딩이 아직 잠겨 있어요</Paragraph.Text>
+						<Paragraph.Text>SSR 행운 부적이 아직 잠겨 있어요</Paragraph.Text>
 					</Paragraph>
 					<Paragraph
 						typography="t7"
@@ -66,8 +66,7 @@ export default function ArchivePage() {
 						style={{ marginTop: spacing.xs }}
 					>
 						<Paragraph.Text>
-							추가 타임라인 기능이 열리면 광고 시청으로 한 번 더 도전할 수
-							있어요.
+							부적 재도전 기능이 열리면 광고 시청으로 한 번 더 도전할 수 있어요.
 						</Paragraph.Text>
 					</Paragraph>
 				</section>
@@ -102,7 +101,7 @@ export default function ArchivePage() {
 						style={{ marginTop: spacing.xs }}
 					>
 						<Paragraph.Text>
-							오늘의 선택지를 입력하면 첫 엔딩이 열립니다.
+							오늘의 선택지를 입력하면 첫 행운 부적이 열립니다.
 						</Paragraph.Text>
 					</Paragraph>
 					<div style={styles.action}>
@@ -113,7 +112,7 @@ export default function ArchivePage() {
 							display="block"
 							onClick={() => navigate("/simulate")}
 						>
-							첫 시뮬레이션 만들기
+							첫 부적 뽑기
 						</Button>
 					</div>
 				</section>

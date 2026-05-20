@@ -176,7 +176,7 @@ export default function ResultPage() {
 	return (
 		<AppLayout>
 			<PageHeader
-				title="미래 시뮬레이션"
+				title="오늘의 징조"
 				subtitle="오늘의 결과가 저장됐어요."
 				backTo="/"
 			/>
@@ -188,8 +188,8 @@ export default function ResultPage() {
 						<Paragraph typography="t6" fontWeight="bold" color="#191F28">
 							<Paragraph.Text>
 								{result.rarity === "SSR"
-									? "오늘 최고 등급을 뽑았어요"
-									: "더 높은 루트가 아직 남아 있어요"}
+									? "오늘의 가장 강한 부적을 뽑았어요"
+									: "더 강한 행운 부적이 아직 남아 있어요"}
 							</Paragraph.Text>
 						</Paragraph>
 						<Paragraph
@@ -199,8 +199,8 @@ export default function ResultPage() {
 						>
 							<Paragraph.Text>
 								{result.rarity === "SSR"
-									? "이 카드는 공유용으로 가장 강한 결과예요."
-									: "SR, SSR 카드는 도감에서 더 희귀하게 보이도록 잠겨 있어요."}
+									? "이 카드는 오늘의 선택을 밀어주는 가장 강한 부적이에요."
+									: "SR, SSR 부적은 오늘의 운이 바뀔 것 같은 희귀 카드로 잠겨 있어요."}
 							</Paragraph.Text>
 						</Paragraph>
 					</div>
@@ -213,7 +213,8 @@ export default function ResultPage() {
 					style={{ marginTop: spacing.lg }}
 				>
 					<Paragraph.Text>
-						재도전 {retryCount}회 · 테스트에서는 누를수록 최소 등급이 올라가요.
+						재도전 {retryCount}회 · 테스트에서는 뽑을수록 더 강한 부적에
+						가까워져요.
 					</Paragraph.Text>
 				</Paragraph>
 				<div style={styles.rankStack}>
@@ -260,7 +261,7 @@ export default function ResultPage() {
 
 			<section style={styles.section}>
 				<Paragraph typography="t6" fontWeight="bold" color="#191F28">
-					<Paragraph.Text>미래 시뮬레이션</Paragraph.Text>
+					<Paragraph.Text>오늘의 징조</Paragraph.Text>
 				</Paragraph>
 				<Paragraph
 					typography="t7"
@@ -273,7 +274,7 @@ export default function ResultPage() {
 
 			<section style={styles.section}>
 				<Paragraph typography="t6" fontWeight="bold" color="#191F28">
-					<Paragraph.Text>희귀 엔딩</Paragraph.Text>
+					<Paragraph.Text>부적의 히든 메시지</Paragraph.Text>
 				</Paragraph>
 				<Paragraph
 					typography="t7"
@@ -287,18 +288,18 @@ export default function ResultPage() {
 			<section style={styles.locked}>
 				<div style={styles.lockedHeader}>
 					<Paragraph typography="t6" fontWeight="bold" color="#191F28">
-						<Paragraph.Text>광고 보고 다른 타임라인</Paragraph.Text>
+						<Paragraph.Text>광고 보고 행운 다시 점치기</Paragraph.Text>
 					</Paragraph>
 					<span style={styles.paidBadge}>AD</span>
 				</div>
 				<Paragraph typography="t7" color="#6B7684">
 					<Paragraph.Text>
-						같은 질문으로 반전 루트와 최악의 루트를 한 번 더 열 수 있어요.
+						같은 질문으로 더 강한 부적과 다른 미래 징조를 한 번 더 열 수 있어요.
 					</Paragraph.Text>
 				</Paragraph>
 				<div style={styles.lockedGrid}>
-					<div style={styles.lockedItem}>잠김 · 반전 루트 시뮬레이션</div>
-					<div style={styles.lockedItem}>잠김 · 최악의 루트 회피 팁</div>
+					<div style={styles.lockedItem}>잠김 · 반전 행운 부적</div>
+					<div style={styles.lockedItem}>잠김 · 나쁜 흐름 피하기</div>
 				</div>
 				<div style={styles.actions}>
 					<Button
@@ -330,7 +331,7 @@ export default function ResultPage() {
 
 			<section style={styles.sharePreview}>
 				<Paragraph typography="t7" fontWeight="bold" style={styles.shareLabel}>
-					<Paragraph.Text>공유용 카드</Paragraph.Text>
+					<Paragraph.Text>공유용 부적 카드</Paragraph.Text>
 				</Paragraph>
 				<SimulationCard result={result} shareMode />
 			</section>
@@ -343,7 +344,7 @@ export default function ResultPage() {
 					display="block"
 					onClick={() => navigate("/archive")}
 				>
-					엔딩 도감 보기
+					행운 부적함 보기
 				</Button>
 				<Button
 					size="large"

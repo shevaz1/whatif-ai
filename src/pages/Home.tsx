@@ -61,7 +61,8 @@ export default function HomePage() {
 				</Paragraph>
 				<Paragraph typography="t7" style={styles.subtitle}>
 					<Paragraph.Text>
-						하고 싶은 선택을 입력하면 미래 루트를 뽑아드립니다.
+						하고 싶은 선택을 입력하면 오늘의 선택을 점쳐보고 행운 부적을
+						뽑아드려요.
 					</Paragraph.Text>
 				</Paragraph>
 				<div style={styles.examples}>
@@ -81,7 +82,7 @@ export default function HomePage() {
 							navigate(snapshot.canSimulateToday ? "/simulate" : "/result")
 						}
 					>
-						{snapshot.canSimulateToday ? "오늘의 루트 뽑기" : "오늘 결과 보기"}
+						{snapshot.canSimulateToday ? "오늘의 부적 뽑기" : "오늘 결과 보기"}
 					</Button>
 				</div>
 			</section>
@@ -91,7 +92,9 @@ export default function HomePage() {
 			) : (
 				<section style={styles.empty}>
 					<Paragraph typography="t6" fontWeight="bold" color="#191F28">
-						<Paragraph.Text>오늘의 가챠가 아직 열려 있어요.</Paragraph.Text>
+						<Paragraph.Text>
+							오늘의 행운 부적이 아직 열려 있어요.
+						</Paragraph.Text>
 					</Paragraph>
 					<Paragraph
 						typography="t7"
@@ -99,8 +102,8 @@ export default function HomePage() {
 						style={{ marginTop: spacing.xs }}
 					>
 						<Paragraph.Text>
-							하루에 한 번만 결과가 저장됩니다. 질문은 짧을수록 밈처럼 잘
-							나와요.
+							하루에 한 번만 결과가 저장됩니다. 질문은 짧을수록 오늘의 징조처럼
+							선명하게 나와요.
 						</Paragraph.Text>
 					</Paragraph>
 				</section>
@@ -111,12 +114,12 @@ export default function HomePage() {
 					label="연속 출석"
 					value={`${snapshot.attendance.streak}일`}
 				/>
-				<MetricCard label="엔딩 수집" value={`${snapshot.results.length}개`} />
+				<MetricCard label="부적 수집" value={`${snapshot.results.length}개`} />
 			</div>
 
 			<section style={styles.revenueHint}>
 				<Paragraph typography="t6" fontWeight="bold" color="#191F28">
-					<Paragraph.Text>내일 또 오면 새 타임라인</Paragraph.Text>
+					<Paragraph.Text>내일 또 오면 새 부적</Paragraph.Text>
 				</Paragraph>
 				<Paragraph
 					typography="t7"
@@ -124,7 +127,7 @@ export default function HomePage() {
 					style={{ marginTop: spacing.xs }}
 				>
 					<Paragraph.Text>
-						하루 1회 무료. 이후에는 광고 보상형 추가 뽑기와 프리미엄 해석으로
+						하루 1회 무료. 이후에는 광고 보상형 부적 재도전과 프리미엄 해석으로
 						확장할 수 있어요.
 					</Paragraph.Text>
 				</Paragraph>

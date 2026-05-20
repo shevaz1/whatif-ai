@@ -10,20 +10,20 @@ export const examplePrompts = [
 
 export const toneByRarity: Record<Rarity, SimulationTone> = {
 	N: {
-		headline: "현실적인 평행세계",
-		mood: "잔잔하지만 손해는 적은 루트",
+		headline: "작은 징조 카드",
+		mood: "오늘의 방향을 잡아주는 기본 부적",
 	},
 	R: {
-		headline: "살짝 재밌어지는 루트",
-		mood: "변수가 생기고 이야기가 굴러가는 루트",
+		headline: "반전 행운 카드",
+		mood: "막힌 흐름을 틀어주는 행운 부적",
 	},
 	SR: {
-		headline: "도파민 상승 루트",
-		mood: "리스크와 보상이 같이 커지는 루트",
+		headline: "행운 상승 카드",
+		mood: "선택의 기세를 올려주는 강한 부적",
 	},
 	SSR: {
-		headline: "이건 좀 캡처각",
-		mood: "희귀 변수가 터지는 레전드 루트",
+		headline: "레전드 행운 부적",
+		mood: "오늘 하루가 달라질 것 같은 희귀 부적",
 	},
 };
 

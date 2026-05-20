@@ -17,32 +17,32 @@ const rarityMeta: Record<
 	}
 > = {
 	N: {
-		label: "평범 루트",
-		catchphrase: "무난하지만 잃을 건 적은 선택",
+		label: "작은 징조 카드",
+		catchphrase: "오늘의 방향을 조용히 잡아주는 기본 부적",
 		odds: "등장 확률 52%",
 		color: "#6B7684",
 		deepColor: "#333D4B",
 		softColor: "#F2F4F6",
 	},
 	R: {
-		label: "반전 루트",
-		catchphrase: "작은 변수 하나로 분위기 전환",
+		label: "반전 행운 카드",
+		catchphrase: "막힌 흐름을 살짝 틀어주는 행운 부적",
 		odds: "등장 확률 30%",
 		color: "#3182F6",
 		deepColor: "#1B64DA",
 		softColor: "#EAF3FF",
 	},
 	SR: {
-		label: "주인공 루트",
-		catchphrase: "오늘만큼은 타이밍이 편드는 선택",
+		label: "행운 상승 카드",
+		catchphrase: "선택의 기세를 올려주는 강한 부적",
 		odds: "등장 확률 14%",
 		color: "#F97316",
 		deepColor: "#C2410C",
 		softColor: "#FFF3E0",
 	},
 	SSR: {
-		label: "레전드 루트",
-		catchphrase: "캡처하고 자랑할 만한 희귀 타임라인",
+		label: "레전드 행운 부적",
+		catchphrase: "오늘 하루가 달라질 것 같은 가장 희귀한 부적",
 		odds: "등장 확률 4%",
 		color: "#E11D48",
 		deepColor: "#BE123C",
@@ -174,7 +174,7 @@ export default function SimulationCard({
 				background: `linear-gradient(180deg, ${meta.softColor} 0%, #FFFFFF 68%)`,
 				minHeight: shareMode ? 460 : undefined,
 			}}
-			aria-label={`${result.question} 결과 카드`}
+			aria-label={`${result.question} 행운 부적 카드`}
 		>
 			<div
 				style={{
@@ -270,14 +270,16 @@ export default function SimulationCard({
 				</Paragraph>
 				<Paragraph typography="t7" fontWeight="bold" color={meta.color}>
 					<Paragraph.Text>
-						{result.rarity === "SSR" ? "최고 등급 달성" : "SR · SSR 루트 도전"}
+						{result.rarity === "SSR"
+							? "오늘의 최고 부적 달성"
+							: "SR · SSR 부적 도전"}
 					</Paragraph.Text>
 				</Paragraph>
 			</div>
 
 			{shareMode ? (
 				<Paragraph typography="t7" fontWeight="bold" style={styles.brand}>
-					<Paragraph.Text>인생선택에서 뽑은 미래 카드</Paragraph.Text>
+					<Paragraph.Text>인생선택에서 뽑은 오늘의 행운 부적</Paragraph.Text>
 				</Paragraph>
 			) : null}
 		</section>
