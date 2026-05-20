@@ -176,8 +176,8 @@ export default function ResultPage() {
 	return (
 		<AppLayout>
 			<PageHeader
-				title="오늘의 징조"
-				subtitle="오늘의 결과가 저장됐어요."
+				title="인생 시뮬레이션"
+				subtitle="미래 결과와 행운 부적이 저장됐어요."
 				backTo="/"
 			/>
 			<SimulationCard result={result} />
@@ -261,7 +261,7 @@ export default function ResultPage() {
 
 			<section style={styles.section}>
 				<Paragraph typography="t6" fontWeight="bold" color="#191F28">
-					<Paragraph.Text>오늘의 징조</Paragraph.Text>
+					<Paragraph.Text>인생 시뮬레이션</Paragraph.Text>
 				</Paragraph>
 				<Paragraph
 					typography="t7"
@@ -274,7 +274,7 @@ export default function ResultPage() {
 
 			<section style={styles.section}>
 				<Paragraph typography="t6" fontWeight="bold" color="#191F28">
-					<Paragraph.Text>부적의 히든 메시지</Paragraph.Text>
+					<Paragraph.Text>희귀 엔딩</Paragraph.Text>
 				</Paragraph>
 				<Paragraph
 					typography="t7"
@@ -288,7 +288,7 @@ export default function ResultPage() {
 			<section style={styles.locked}>
 				<div style={styles.lockedHeader}>
 					<Paragraph typography="t6" fontWeight="bold" color="#191F28">
-						<Paragraph.Text>광고 보고 행운 다시 점치기</Paragraph.Text>
+						<Paragraph.Text>광고 보고 다른 미래 시뮬레이션</Paragraph.Text>
 					</Paragraph>
 					<span style={styles.paidBadge}>AD</span>
 				</div>
@@ -298,7 +298,7 @@ export default function ResultPage() {
 					</Paragraph.Text>
 				</Paragraph>
 				<div style={styles.lockedGrid}>
-					<div style={styles.lockedItem}>잠김 · 반전 행운 부적</div>
+					<div style={styles.lockedItem}>잠김 · 반전 미래 시뮬레이션</div>
 					<div style={styles.lockedItem}>잠김 · 나쁜 흐름 피하기</div>
 				</div>
 				<div style={styles.actions}>
@@ -344,7 +344,7 @@ export default function ResultPage() {
 					display="block"
 					onClick={() => navigate("/archive")}
 				>
-					행운 부적함 보기
+					시뮬레이션 보관함 보기
 				</Button>
 				<Button
 					size="large"
