@@ -149,6 +149,10 @@ const styles = {
 		alignItems: "center",
 		gap: spacing.sm,
 	} as CSSProperties,
+	rule: {
+		color: "#6B7684",
+		marginTop: spacing.sm,
+	} as CSSProperties,
 	brand: {
 		color: "#6B7684",
 		marginTop: spacing.xl,
@@ -276,6 +280,11 @@ export default function SimulationCard({
 					</Paragraph.Text>
 				</Paragraph>
 			</div>
+			<Paragraph typography="t7" style={styles.rule}>
+				<Paragraph.Text>
+					등급이 높을수록 더 좋은 미래가 시뮬레이션돼요.
+				</Paragraph.Text>
+			</Paragraph>
 
 			{shareMode ? (
 				<Paragraph typography="t7" fontWeight="bold" style={styles.brand}>

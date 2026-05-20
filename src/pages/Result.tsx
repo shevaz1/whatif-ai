@@ -200,7 +200,7 @@ export default function ResultPage() {
 							<Paragraph.Text>
 								{result.rarity === "SSR"
 									? "이 카드는 오늘의 선택을 밀어주는 가장 강한 부적이에요."
-									: "SR, SSR 부적은 오늘의 운이 바뀔 것 같은 희귀 카드로 잠겨 있어요."}
+									: "높은 등급일수록 더 좋은 미래 결과와 더 강한 부적이 열려요."}
 							</Paragraph.Text>
 						</Paragraph>
 					</div>
