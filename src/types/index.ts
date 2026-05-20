@@ -31,6 +31,7 @@ export interface SimulationResult {
 	rareEnding: string;
 	createdAt: string;
 	attempt?: number;
+	usedTalisman?: Rarity;
 }
 
 export type SimulationDraft = Omit<
@@ -47,9 +48,19 @@ export interface AttendanceState {
 export interface WhatIfState {
 	results: SimulationResult[];
 	attendance: AttendanceState;
+	talismans: TalismanItem[];
 }
 
 export interface WhatIfSnapshot extends WhatIfState {
 	todayResult: SimulationResult | null;
 	canSimulateToday: boolean;
+}
+
+export interface TalismanItem {
+	id: string;
+	rarity: Rarity;
+	name: string;
+	description: string;
+	retryBonus: number;
+	createdAt: string;
 }

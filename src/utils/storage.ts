@@ -1,7 +1,9 @@
 import type {
 	AttendanceState,
+	Rarity,
 	SimulationDraft,
 	SimulationResult,
+	TalismanItem,
 	WhatIfSnapshot,
 	WhatIfState,
 } from "@/types";
@@ -18,6 +20,37 @@ const defaultAttendance: AttendanceState = {
 const defaultState: WhatIfState = {
 	results: [],
 	attendance: defaultAttendance,
+	talismans: [],
+};
+
+const talismanMeta: Record<
+	Rarity,
+	{ name: string; description: string; retryBonus: number; weight: number }
+> = {
+	N: {
+		name: "작은 징조 부적",
+		description: "재시도 1회. 좋은 미래 확률이 아주 조금 올라가요.",
+		retryBonus: 1,
+		weight: 52,
+	},
+	R: {
+		name: "반전 행운 부적",
+		description: "재시도 1회. R 이상 미래를 기대해볼 수 있어요.",
+		retryBonus: 1,
+		weight: 30,
+	},
+	SR: {
+		name: "행운 상승 부적",
+		description: "재시도 2회급 보정. 좋은 미래 쪽으로 강하게 밀어줘요.",
+		retryBonus: 2,
+		weight: 14,
+	},
+	SSR: {
+		name: "레전드 행운 부적",
+		description: "재시도 3회급 보정. 가장 좋은 미래에 가까워져요.",
+		retryBonus: 3,
+		weight: 4,
+	},
 };
 
 function canUseStorage(): boolean {
@@ -29,12 +62,30 @@ function canUseStorage(): boolean {
 function normalizeState(raw: Partial<WhatIfState> | null): WhatIfState {
 	return {
 		results: Array.isArray(raw?.results) ? raw.results : [],
+		talismans: Array.isArray(raw?.talismans) ? raw.talismans : [],
 		attendance: {
 			streak: Number(raw?.attendance?.streak ?? 0),
 			bestStreak: Number(raw?.attendance?.bestStreak ?? 0),
 			lastUsedDate: raw?.attendance?.lastUsedDate ?? null,
 		},
 	};
+}
+
+function pickTalismanRarity(): Rarity {
+	const entries = Object.entries(talismanMeta) as Array<
+		[Rarity, (typeof talismanMeta)[Rarity]]
+	>;
+	const total = entries.reduce((sum, [, item]) => sum + item.weight, 0);
+	let cursor = Math.floor(Math.random() * total);
+
+	for (const [rarity, item] of entries) {
+		if (cursor < item.weight) {
+			return rarity;
+		}
+		cursor -= item.weight;
+	}
+
+	return "N";
 }
 
 export function loadWhatIfState(): WhatIfState {
@@ -98,6 +149,7 @@ export function createTodaySimulation(
 		previousDate === getYesterdayKey() ? state.attendance.streak + 1 : 1;
 	const nextState: WhatIfState = {
 		results: [result, ...state.results],
+		talismans: state.talismans,
 		attendance: {
 			streak: nextStreak,
 			bestStreak: Math.max(state.attendance.bestStreak, nextStreak),
@@ -120,6 +172,7 @@ export function getTodayAttemptCount(question: string): number {
 export function createRetrySimulation(
 	resultDraft: SimulationDraft,
 	attempt: number,
+	usedTalisman?: Rarity,
 ): WhatIfState {
 	const state = loadWhatIfState();
 	const today = getTodayKey();
@@ -129,6 +182,7 @@ export function createRetrySimulation(
 		date: today,
 		createdAt: new Date().toISOString(),
 		attempt,
+		usedTalisman,
 	};
 	const nextState: WhatIfState = {
 		...state,
@@ -137,6 +191,35 @@ export function createRetrySimulation(
 
 	saveWhatIfState(nextState);
 	return nextState;
+}
+
+export function createTalismanReward(): WhatIfState {
+	const state = loadWhatIfState();
+	const rarity = pickTalismanRarity();
+	const meta = talismanMeta[rarity];
+	const item: TalismanItem = {
+		id: `talisman-${Date.now()}`,
+		rarity,
+		name: meta.name,
+		description: meta.description,
+		retryBonus: meta.retryBonus,
+		createdAt: new Date().toISOString(),
+	};
+	const nextState = {
+		...state,
+		talismans: [item, ...state.talismans],
+	};
+
+	saveWhatIfState(nextState);
+	return nextState;
+}
+
+export function consumeTalisman(id: string): void {
+	const state = loadWhatIfState();
+	saveWhatIfState({
+		...state,
+		talismans: state.talismans.filter((item) => item.id !== id),
+	});
 }
 
 export function clearWhatIfState(): WhatIfState {

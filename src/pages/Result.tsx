@@ -7,6 +7,7 @@ import PageHeader from "@/components/PageHeader";
 import SimulationCard from "@/components/SimulationCard";
 import { radius, spacing } from "@/design/tokens";
 import { useWhatIf } from "@/hooks/useWhatIf";
+import type { Rarity } from "@/types";
 
 const styles = {
 	panel: {
@@ -52,6 +53,28 @@ const styles = {
 		fontWeight: 800,
 		whiteSpace: "nowrap",
 	} as CSSProperties,
+	talismanCard: {
+		borderRadius: radius.xl,
+		padding: spacing.lg,
+		marginTop: spacing.lg,
+		backgroundColor: "#F9FAFB",
+		border: "1px solid #E5E8EB",
+	} as CSSProperties,
+	talismanTop: {
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "space-between",
+		gap: spacing.sm,
+		marginBottom: spacing.xs,
+	} as CSSProperties,
+	talismanBadge: {
+		borderRadius: radius.full,
+		padding: `${spacing.xxs}px ${spacing.sm}px`,
+		fontSize: 13,
+		fontWeight: 900,
+		color: "#FFFFFF",
+		whiteSpace: "nowrap",
+	} as CSSProperties,
 	locked: {
 		border: "1px solid #E5E8EB",
 		borderRadius: radius.xxl,
@@ -76,19 +99,6 @@ const styles = {
 		fontWeight: 800,
 		whiteSpace: "nowrap",
 	} as CSSProperties,
-	lockedGrid: {
-		display: "grid",
-		gap: spacing.sm,
-		marginTop: spacing.lg,
-	} as CSSProperties,
-	lockedItem: {
-		borderRadius: radius.lg,
-		backgroundColor: "#F9FAFB",
-		padding: spacing.md,
-		color: "#4E5968",
-		fontSize: 14,
-		fontWeight: 700,
-	} as CSSProperties,
 	actions: {
 		display: "grid",
 		gap: spacing.sm,
@@ -103,12 +113,21 @@ const rankColors = {
 	SSR: { color: "#E11D48", bg: "#FEECEF" },
 } as const;
 
+const talismanColors: Record<Rarity, string> = {
+	N: "#6B7684",
+	R: "#3182F6",
+	SR: "#F97316",
+	SSR: "#E11D48",
+};
+
 export default function ResultPage() {
 	const navigate = useNavigate();
-	const { snapshot, retry } = useWhatIf();
+	const { snapshot, grantTalisman, retryWithTalisman } = useWhatIf();
 	const [isRetrying, setIsRetrying] = useState(false);
+	const [isGranting, setIsGranting] = useState(false);
 	const [retryError, setRetryError] = useState("");
 	const result = snapshot.todayResult;
+	const talisman = snapshot.talismans[0] ?? null;
 
 	if (!result) {
 		return (
@@ -140,14 +159,14 @@ export default function ResultPage() {
 
 	const retryCount = Math.max((result.attempt ?? 1) - 1, 0);
 	const submitRetry = async () => {
-		if (isRetrying) {
+		if (isRetrying || !talisman) {
 			return;
 		}
 
 		setIsRetrying(true);
 		setRetryError("");
 		try {
-			await retry(result.question);
+			await retryWithTalisman(result.question, talisman);
 		} catch (error) {
 			setRetryError(
 				error instanceof Error
@@ -157,6 +176,16 @@ export default function ResultPage() {
 		} finally {
 			setIsRetrying(false);
 		}
+	};
+
+	const receiveTalisman = () => {
+		if (isGranting) {
+			return;
+		}
+
+		setIsGranting(true);
+		grantTalisman();
+		window.setTimeout(() => setIsGranting(false), 280);
 	};
 
 	return (
@@ -175,7 +204,7 @@ export default function ResultPage() {
 							<Paragraph.Text>
 								{result.rarity === "SSR"
 									? "오늘의 가장 강한 부적을 뽑았어요"
-									: "더 강한 행운 부적이 아직 남아 있어요"}
+									: "행운부적을 쓰면 더 좋은 미래에 가까워져요"}
 							</Paragraph.Text>
 						</Paragraph>
 						<Paragraph
@@ -186,7 +215,7 @@ export default function ResultPage() {
 							<Paragraph.Text>
 								{result.rarity === "SSR"
 									? "이 카드는 오늘의 선택을 밀어주는 가장 강한 부적이에요."
-									: "높은 등급일수록 더 좋은 미래 결과와 더 강한 부적이 열려요."}
+									: "광고 보상으로 받은 부적 등급이 높을수록 좋은 카드 확률이 올라가요."}
 							</Paragraph.Text>
 						</Paragraph>
 					</div>
@@ -199,8 +228,8 @@ export default function ResultPage() {
 					style={{ marginTop: spacing.lg }}
 				>
 					<Paragraph.Text>
-						재도전 {retryCount}회 · 테스트에서는 뽑을수록 더 강한 부적에
-						가까워져요.
+						재도전 {retryCount}회 · 부적을 쓰면 재시도 보정과 등급 보너스가
+						붙어요.
 					</Paragraph.Text>
 				</Paragraph>
 				<div style={styles.rankStack}>
@@ -222,55 +251,58 @@ export default function ResultPage() {
 						);
 					})}
 				</div>
-				<div style={styles.actions}>
-					<Button
-						size="large"
-						color="primary"
-						variant="fill"
-						display="block"
-						disabled={isRetrying || result.rarity === "SSR"}
-						onClick={submitRetry}
-					>
-						{result.rarity === "SSR"
-							? "최고 부적 달성"
-							: isRetrying
-								? "부적 다시 뽑는 중"
-								: "테스트로 더 강한 부적 뽑기"}
-					</Button>
-					{retryError ? (
-						<Paragraph typography="t7" color="#E11D48">
-							<Paragraph.Text>{retryError}</Paragraph.Text>
+				{talisman ? (
+					<div style={styles.talismanCard}>
+						<div style={styles.talismanTop}>
+							<Paragraph typography="t6" fontWeight="bold" color="#191F28">
+								<Paragraph.Text>{talisman.name}</Paragraph.Text>
+							</Paragraph>
+							<span
+								style={{
+									...styles.talismanBadge,
+									backgroundColor: talismanColors[talisman.rarity],
+								}}
+							>
+								{talisman.rarity}
+							</span>
+						</div>
+						<Paragraph typography="t7" color="#6B7684">
+							<Paragraph.Text>{talisman.description}</Paragraph.Text>
 						</Paragraph>
-					) : null}
-				</div>
-			</section>
-
-			<section style={styles.locked}>
-				<div style={styles.lockedHeader}>
-					<Paragraph typography="t6" fontWeight="bold" color="#191F28">
-						<Paragraph.Text>광고 보고 다른 미래 시뮬레이션</Paragraph.Text>
-					</Paragraph>
-					<span style={styles.paidBadge}>AD</span>
-				</div>
-				<Paragraph typography="t7" color="#6B7684">
-					<Paragraph.Text>
-						같은 질문으로 더 강한 부적과 다른 미래 징조를 한 번 더 열 수 있어요.
-					</Paragraph.Text>
-				</Paragraph>
-				<div style={styles.lockedGrid}>
-					<div style={styles.lockedItem}>잠김 · 반전 미래 시뮬레이션</div>
-					<div style={styles.lockedItem}>잠김 · 나쁜 흐름 피하기</div>
-				</div>
+					</div>
+				) : null}
 				<div style={styles.actions}>
 					<Button
 						size="large"
 						color="dark"
 						variant="weak"
 						display="block"
-						disabled
+						disabled={isGranting}
+						onClick={receiveTalisman}
 					>
-						광고 SDK 연결 후 활성화
+						{isGranting ? "행운부적 받는 중" : "테스트 광고 보고 행운부적 받기"}
 					</Button>
+					<Button
+						size="large"
+						color="primary"
+						variant="fill"
+						display="block"
+						disabled={isRetrying || !talisman || result.rarity === "SSR"}
+						onClick={submitRetry}
+					>
+						{result.rarity === "SSR"
+							? "최고 부적 달성"
+							: isRetrying
+								? "부적으로 다시 점치는 중"
+								: talisman
+									? "부적 사용하고 다시 시뮬레이션"
+									: "행운부적을 먼저 받아주세요"}
+					</Button>
+					{retryError ? (
+						<Paragraph typography="t7" color="#E11D48">
+							<Paragraph.Text>{retryError}</Paragraph.Text>
+						</Paragraph>
+					) : null}
 				</div>
 			</section>
 

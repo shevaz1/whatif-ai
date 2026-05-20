@@ -11,6 +11,13 @@ RARITY_WEIGHTS = {
     "SSR": 4,
 }
 
+TALISMAN_BONUS = {
+    "N": 1,
+    "R": 1,
+    "SR": 2,
+    "SSR": 3,
+}
+
 QUALITY_RANGES = {
     "N": {"success": (32, 58), "risk": (42, 78)},
     "R": {"success": (52, 72), "risk": (28, 62)},
@@ -45,8 +52,8 @@ RARE_ENDINGS = [
 ]
 
 
-def _seed(question: str, retry_count: int = 0) -> int:
-    digest = sha256(f"{question}:{retry_count}".encode("utf-8")).hexdigest()
+def _seed(question: str, retry_count: int = 0, talisman_rarity: str | None = None) -> int:
+    digest = sha256(f"{question}:{retry_count}:{talisman_rarity}".encode("utf-8")).hexdigest()
     return int(digest[:12], 16)
 
 
@@ -60,9 +67,14 @@ def _pick_rarity(seed: int) -> str:
     return "N"
 
 
-def _boost_rarity_for_retry(rarity: str, retry_count: int) -> str:
+def _boost_rarity_for_retry(
+    rarity: str,
+    retry_count: int,
+    talisman_rarity: str | None = None,
+) -> str:
     order = ["N", "R", "SR", "SSR"]
-    minimum_index = min(retry_count, len(order) - 1)
+    talisman_bonus = TALISMAN_BONUS.get(talisman_rarity or "", 0)
+    minimum_index = min(retry_count + talisman_bonus, len(order) - 1)
     current_index = order.index(rarity)
     return order[max(current_index, minimum_index)]
 
@@ -71,17 +83,25 @@ def _clamp(value: int, minimum: int, maximum: int) -> int:
     return max(minimum, min(maximum, int(value)))
 
 
-def simulate(question: str, retry_count: int = 0) -> SimulationResponse:
+def simulate(
+    question: str,
+    retry_count: int = 0,
+    talisman_rarity: str | None = None,
+) -> SimulationResponse:
     if os.getenv("OPENAI_API_KEY"):
-        return simulate_with_openai(question, retry_count)
+        return simulate_with_openai(question, retry_count, talisman_rarity)
 
     if os.getenv("ALLOW_LOCAL_SIMULATION_FALLBACK") == "true":
-        return simulate_locally(question, retry_count)
+        return simulate_locally(question, retry_count, talisman_rarity)
 
     raise RuntimeError("OPENAI_API_KEY is required for AI simulation")
 
 
-def simulate_with_openai(question: str, retry_count: int = 0) -> SimulationResponse:
+def simulate_with_openai(
+    question: str,
+    retry_count: int = 0,
+    talisman_rarity: str | None = None,
+) -> SimulationResponse:
     client = OpenAI()
     model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
@@ -106,8 +126,10 @@ def simulate_with_openai(question: str, retry_count: int = 0) -> SimulationRespo
                 "content": (
                     f"질문: {question}\n\n"
                     f"재도전 횟수: {retry_count}회\n"
+                    f"사용한 행운부적 등급: {talisman_rarity or '없음'}\n"
                     "성공확률과 위험도는 0~100 정수로 작성해. 등급별 기준은 다음과 같아. "
                     "N=평범한 미래, R=조금 나아지는 미래, SR=좋은 미래, SSR=가장 좋은 미래. "
+                    "행운부적을 사용했다면 해당 부적 등급에 맞춰 더 좋은 미래 등급이 나올 가능성을 높여. "
                     "rarity는 N, R, SR, SSR 중 하나로 고르고, 높은 등급일수록 결과 문장도 더 유리하게 써. "
                     "endingId는 rarity에 맞게 N=quiet-win, R=plot-twist, "
                     "SR=main-character, SSR=legendary-timeline 중 하나로 골라. "
@@ -122,15 +144,16 @@ def simulate_with_openai(question: str, retry_count: int = 0) -> SimulationRespo
     if parsed is None:
         raise RuntimeError("AI simulation response was empty")
 
-    return normalize_response(parsed, question, retry_count)
+    return normalize_response(parsed, question, retry_count, talisman_rarity)
 
 
 def normalize_response(
     result: SimulationResponse,
     question: str,
     retry_count: int = 0,
+    talisman_rarity: str | None = None,
 ) -> SimulationResponse:
-    rarity = _boost_rarity_for_retry(result.rarity, retry_count)
+    rarity = _boost_rarity_for_retry(result.rarity, retry_count, talisman_rarity)
     ending_id, ending_title, ending_description = ENDING_BY_RARITY[rarity]
     ranges = QUALITY_RANGES[rarity]
     return SimulationResponse(
@@ -147,9 +170,13 @@ def normalize_response(
     )
 
 
-def simulate_locally(question: str, retry_count: int = 0) -> SimulationResponse:
-    seed = _seed(question, retry_count)
-    rarity = _boost_rarity_for_retry(_pick_rarity(seed), retry_count)
+def simulate_locally(
+    question: str,
+    retry_count: int = 0,
+    talisman_rarity: str | None = None,
+) -> SimulationResponse:
+    seed = _seed(question, retry_count, talisman_rarity)
+    rarity = _boost_rarity_for_retry(_pick_rarity(seed), retry_count, talisman_rarity)
     ending_id, ending_title, ending_description = ENDING_BY_RARITY[rarity]
     success_min, success_max = QUALITY_RANGES[rarity]["success"]
     risk_min, risk_max = QUALITY_RANGES[rarity]["risk"]

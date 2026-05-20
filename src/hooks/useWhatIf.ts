@@ -1,9 +1,11 @@
 import { useCallback, useMemo, useState } from "react";
-import type { WhatIfSnapshot } from "@/types";
+import type { TalismanItem, WhatIfSnapshot } from "@/types";
 import { requestAiSimulation } from "@/utils/api";
 import {
 	clearWhatIfState,
+	consumeTalisman,
 	createRetrySimulation,
+	createTalismanReward,
 	createTodaySimulation,
 	getTodayAttemptCount,
 	getWhatIfSnapshot,
@@ -34,6 +36,31 @@ export function useWhatIf() {
 		setSnapshot(getWhatIfSnapshot());
 	}, []);
 
+	const grantTalisman = useCallback(() => {
+		createTalismanReward();
+		setSnapshot(getWhatIfSnapshot());
+	}, []);
+
+	const retryWithTalisman = useCallback(
+		async (question: string, talisman: TalismanItem) => {
+			const currentAttemptCount = getTodayAttemptCount(question);
+			const boostedRetryCount = currentAttemptCount + talisman.retryBonus;
+			const resultDraft = await requestAiSimulation(
+				question,
+				boostedRetryCount,
+				talisman.rarity,
+			);
+			createRetrySimulation(
+				resultDraft,
+				currentAttemptCount + 1,
+				talisman.rarity,
+			);
+			consumeTalisman(talisman.id);
+			setSnapshot(getWhatIfSnapshot());
+		},
+		[],
+	);
+
 	const resetAll = useCallback(() => {
 		clearWhatIfState();
 		setSnapshot(getWhatIfSnapshot());
@@ -43,10 +70,20 @@ export function useWhatIf() {
 		() => ({
 			snapshot,
 			refresh,
+			grantTalisman,
 			simulate,
 			retry,
+			retryWithTalisman,
 			resetAll,
 		}),
-		[refresh, resetAll, retry, simulate, snapshot],
+		[
+			grantTalisman,
+			refresh,
+			resetAll,
+			retry,
+			retryWithTalisman,
+			simulate,
+			snapshot,
+		],
 	);
 }
