@@ -103,7 +103,7 @@ def simulate_with_openai(
     talisman_rarity: str | None = None,
 ) -> SimulationResponse:
     client = OpenAI()
-    model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+    model = os.getenv("OPENAI_MODEL", "gpt-5-mini")
 
     response = client.responses.parse(
         model=model,
