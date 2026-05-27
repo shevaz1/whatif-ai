@@ -131,6 +131,10 @@ def simulate(
     raise RuntimeError("OPENAI_API_KEY is required for AI simulation")
 
 
+def get_openai_model() -> str:
+    return os.getenv("OPENAI_MODEL", "gpt-5-nano")
+
+
 def simulate_with_openai(
     question: str,
     retry_count: int = 0,
@@ -138,7 +142,7 @@ def simulate_with_openai(
     minimum_rarity: str | None = None,
 ) -> SimulationResponse:
     client = OpenAI()
-    model = os.getenv("OPENAI_MODEL", "gpt-5-nano")
+    model = get_openai_model()
 
     try:
         response = client.responses.parse(

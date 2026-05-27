@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from schemas import SimulationRequest, SimulationResponse
-from simulator import simulate
+from simulator import get_openai_model, simulate
 
 app = FastAPI(title="인생선택 API")
 
@@ -17,7 +17,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health() -> dict[str, str]:
-    return {"status": "ok"}
+    return {"status": "ok", "model": get_openai_model()}
 
 
 @app.post("/simulate", response_model=SimulationResponse)
