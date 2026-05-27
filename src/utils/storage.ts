@@ -207,7 +207,7 @@ export function createTalismanReward(): WhatIfState {
 	};
 	const nextState = {
 		...state,
-		talismans: [item, ...state.talismans],
+		talismans: [item],
 	};
 
 	saveWhatIfState(nextState);
@@ -218,7 +218,7 @@ export function consumeTalisman(id: string): void {
 	const state = loadWhatIfState();
 	saveWhatIfState({
 		...state,
-		talismans: state.talismans.filter((item) => item.id !== id),
+		talismans: state.talismans[0]?.id === id ? [] : state.talismans,
 	});
 }
 

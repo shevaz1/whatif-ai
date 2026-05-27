@@ -61,8 +61,8 @@ export default function HomePage() {
 				</Paragraph>
 				<Paragraph typography="t7" style={styles.subtitle}>
 					<Paragraph.Text>
-						하고 싶은 선택을 입력하면 AI가 미래를 시뮬레이션하고 행운 부적
-						카드를 뽑아드려요.
+						하고 싶은 선택을 입력하면 AI가 미래를 시뮬레이션하고 미래 카드를
+						뽑아드려요.
 					</Paragraph.Text>
 				</Paragraph>
 				<div style={styles.examples}>
@@ -129,8 +129,8 @@ export default function HomePage() {
 					style={{ marginTop: spacing.xs }}
 				>
 					<Paragraph.Text>
-						하루 1회 무료. 이후에는 광고 보상형 시뮬레이션 재도전과 프리미엄
-						해석으로 확장할 수 있어요.
+						하루 1회 무료. 이후에는 광고 보상형 행운부적으로 더 좋은 미래 카드에
+						재도전할 수 있어요.
 					</Paragraph.Text>
 				</Paragraph>
 			</section>

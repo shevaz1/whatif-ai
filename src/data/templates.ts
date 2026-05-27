@@ -11,19 +11,19 @@ export const examplePrompts = [
 export const toneByRarity: Record<Rarity, SimulationTone> = {
 	N: {
 		headline: "작은 징조 카드",
-		mood: "오늘의 방향을 잡아주는 기본 부적",
+		mood: "오늘의 방향을 잡아주는 기본 미래 카드",
 	},
 	R: {
 		headline: "반전 행운 카드",
-		mood: "막힌 흐름을 틀어주는 행운 부적",
+		mood: "막힌 흐름을 틀어주는 반전 미래 카드",
 	},
 	SR: {
 		headline: "행운 상승 카드",
-		mood: "선택의 기세를 올려주는 강한 부적",
+		mood: "선택의 기세를 올려주는 강한 미래 카드",
 	},
 	SSR: {
-		headline: "레전드 행운 부적",
-		mood: "오늘 하루가 달라질 것 같은 희귀 부적",
+		headline: "레전드 미래 카드",
+		mood: "오늘 하루가 달라질 것 같은 희귀한 미래 카드",
 	},
 };
 

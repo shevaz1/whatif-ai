@@ -18,7 +18,7 @@ const rarityMeta: Record<
 > = {
 	N: {
 		label: "작은 징조 카드",
-		catchphrase: "오늘의 방향을 조용히 잡아주는 기본 부적",
+		catchphrase: "오늘의 방향을 조용히 잡아주는 기본 미래 카드",
 		odds: "등장 확률 52%",
 		color: "#6B7684",
 		deepColor: "#333D4B",
@@ -26,7 +26,7 @@ const rarityMeta: Record<
 	},
 	R: {
 		label: "반전 행운 카드",
-		catchphrase: "막힌 흐름을 살짝 틀어주는 행운 부적",
+		catchphrase: "막힌 흐름을 살짝 틀어주는 반전 미래 카드",
 		odds: "등장 확률 30%",
 		color: "#3182F6",
 		deepColor: "#1B64DA",
@@ -34,15 +34,15 @@ const rarityMeta: Record<
 	},
 	SR: {
 		label: "행운 상승 카드",
-		catchphrase: "선택의 기세를 올려주는 강한 부적",
+		catchphrase: "선택의 기세를 올려주는 강한 미래 카드",
 		odds: "등장 확률 14%",
 		color: "#F97316",
 		deepColor: "#C2410C",
 		softColor: "#FFF3E0",
 	},
 	SSR: {
-		label: "레전드 행운 부적",
-		catchphrase: "오늘 하루가 달라질 것 같은 가장 희귀한 부적",
+		label: "레전드 미래 카드",
+		catchphrase: "오늘 하루가 달라질 것 같은 가장 희귀한 미래 카드",
 		odds: "등장 확률 4%",
 		color: "#E11D48",
 		deepColor: "#BE123C",
@@ -193,7 +193,7 @@ export default function SimulationCard({ result }: SimulationCardProps) {
 				...styles.card,
 				background: `linear-gradient(180deg, ${meta.softColor} 0%, #FFFFFF 68%)`,
 			}}
-			aria-label={`${result.question} 행운 부적 카드`}
+			aria-label={`${result.question} 미래 카드`}
 		>
 			<div
 				style={{
@@ -308,8 +308,8 @@ export default function SimulationCard({ result }: SimulationCardProps) {
 				<Paragraph typography="t7" fontWeight="bold" color={meta.color}>
 					<Paragraph.Text>
 						{result.rarity === "SSR"
-							? "오늘의 최고 부적 달성"
-							: "SR · SSR 부적 도전"}
+							? "오늘의 최고 카드 달성"
+							: "SR · SSR 카드 도전"}
 					</Paragraph.Text>
 				</Paragraph>
 			</div>

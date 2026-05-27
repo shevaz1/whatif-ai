@@ -27,6 +27,7 @@ def create_simulation(payload: SimulationRequest) -> SimulationResponse:
             payload.question.strip(),
             payload.retryCount,
             payload.talismanRarity,
+            payload.minimumRarity,
         )
     except RuntimeError as error:
         raise HTTPException(status_code=503, detail=str(error)) from error

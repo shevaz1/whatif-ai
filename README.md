@@ -2,7 +2,7 @@
 
 Apps in Toss WebView 기반 AI 인생 선택 시뮬레이션 미니앱 MVP입니다.
 
-사용자가 오늘 하고 싶은 선택을 입력하면 OpenAI 기반 FastAPI 백엔드가 성공확률, 위험도, 인생 시뮬레이션, 히든 메시지, 등급을 행운 부적 카드 형태로 생성합니다. 결과와 출석 정보는 MVP 기준 localStorage에 저장합니다.
+사용자가 오늘 하고 싶은 선택을 입력하면 OpenAI 기반 FastAPI 백엔드가 성공확률, 위험도, 인생 시뮬레이션, 히든 메시지, 등급을 미래 카드 형태로 생성합니다. 결과와 출석 정보는 MVP 기준 localStorage에 저장합니다.
 
 ## 실행
 
@@ -29,7 +29,7 @@ OPENAI_API_KEY=sk-... uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 선택 환경변수:
 
-- `OPENAI_MODEL`: 기본값 `gpt-5-mini`
+- `OPENAI_MODEL`: 기본값 `gpt-5-nano`
 - `ALLOW_LOCAL_SIMULATION_FALLBACK=true`: OpenAI 키 없이 개발용 로컬 시뮬레이션 허용
 
 ## Render 백엔드 배포
@@ -41,7 +41,7 @@ Render Dashboard에서 Blueprint 또는 Web Service를 만들고 이 GitHub repo
 필수 환경변수:
 
 - `OPENAI_API_KEY`: Render 환경변수로 직접 입력
-- `OPENAI_MODEL`: `gpt-5-mini`
+- `OPENAI_MODEL`: `gpt-5-nano`
 
 배포 후 발급된 URL의 `/health`가 `{"status":"ok"}`를 반환하면 프론트 출시 빌드를 다시 만듭니다.
 

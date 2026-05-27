@@ -52,13 +52,13 @@ export default function ArchivePage() {
 		<AppLayout>
 			<PageHeader
 				title="시뮬레이션 보관함"
-				subtitle="뽑은 미래 결과와 행운 부적을 확인해요."
+				subtitle="뽑은 미래 카드와 행운부적을 확인해요."
 			/>
 
 			{hasSsr ? null : (
 				<section style={styles.lockedSsr}>
 					<Paragraph typography="t6" fontWeight="bold" color="#191F28">
-						<Paragraph.Text>SSR 미래 부적이 아직 잠겨 있어요</Paragraph.Text>
+						<Paragraph.Text>SSR 미래 카드가 아직 없어요</Paragraph.Text>
 					</Paragraph>
 					<Paragraph
 						typography="t7"

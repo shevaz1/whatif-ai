@@ -8,8 +8,9 @@ EndingId = Literal["quiet-win", "plot-twist", "main-character", "legendary-timel
 
 class SimulationRequest(BaseModel):
     question: str = Field(min_length=2, max_length=40)
-    retryCount: int = Field(default=0, ge=0, le=10)
+    retryCount: int = Field(default=0, ge=0, le=100)
     talismanRarity: Rarity | None = None
+    minimumRarity: Rarity | None = None
 
 
 class SimulationResponse(BaseModel):

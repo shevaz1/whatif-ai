@@ -6,6 +6,7 @@ export async function requestAiSimulation(
 	question: string,
 	retryCount = 0,
 	talismanRarity?: Rarity,
+	minimumRarity?: Rarity,
 ): Promise<SimulationDraft> {
 	if (!API_BASE_URL) {
 		throw new Error("AI 서버 주소가 설정되지 않았어요.");
@@ -16,14 +17,22 @@ export async function requestAiSimulation(
 		headers: {
 			"Content-Type": "application/json",
 		},
-		body: JSON.stringify({ question, retryCount, talismanRarity }),
+		body: JSON.stringify({
+			question,
+			retryCount,
+			talismanRarity,
+			minimumRarity,
+		}),
 	});
 
 	if (!response.ok) {
 		const body = (await response.json().catch(() => null)) as {
-			detail?: string;
+			detail?: string | Array<{ msg?: string }>;
 		} | null;
-		throw new Error(body?.detail ?? "AI 시뮬레이션 생성에 실패했어요.");
+		const detail = Array.isArray(body?.detail)
+			? body.detail[0]?.msg
+			: body?.detail;
+		throw new Error(detail ?? "AI 시뮬레이션 생성에 실패했어요.");
 	}
 
 	return (await response.json()) as SimulationDraft;

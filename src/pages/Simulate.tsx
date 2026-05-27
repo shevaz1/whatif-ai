@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
 import PageHeader from "@/components/PageHeader";
+import SimulationProgress from "@/components/SimulationProgress";
 import { examplePrompts } from "@/data/templates";
 import { radius, spacing } from "@/design/tokens";
 import { useWhatIf } from "@/hooks/useWhatIf";
@@ -96,6 +97,7 @@ export default function SimulatePage() {
 					onChange={(event) => setQuestion(event.target.value)}
 					style={styles.input}
 					maxLength={40}
+					disabled={isSubmitting}
 				/>
 				<Paragraph typography="t7" style={styles.helper}>
 					<Paragraph.Text>
@@ -118,6 +120,7 @@ export default function SimulatePage() {
 							size="medium"
 							color="dark"
 							variant="weak"
+							disabled={isSubmitting}
 							onClick={() => setQuestion(prompt)}
 						>
 							{prompt}
@@ -136,6 +139,7 @@ export default function SimulatePage() {
 						{isSubmitting ? "AI가 미래 보는 중" : "미래 뽑기"}
 					</Button>
 				</div>
+				{isSubmitting ? <SimulationProgress /> : null}
 			</section>
 		</AppLayout>
 	);

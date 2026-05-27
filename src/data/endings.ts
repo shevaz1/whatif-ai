@@ -30,9 +30,9 @@ export const endings: Ending[] = [
 	{
 		id: "legendary-timeline",
 		rarity: "SSR",
-		title: "레전드 행운 부적",
+		title: "레전드 미래 카드",
 		description:
-			"말도 안 되게 좋은 변수가 붙습니다. 오늘의 부적으로 간직하고 싶어집니다.",
+			"말도 안 되게 좋은 변수가 붙습니다. 오늘의 카드로 간직하고 싶어집니다.",
 		color: "#FEECEF",
 		accentColor: "#E11D48",
 	},

@@ -44,11 +44,12 @@ export function useWhatIf() {
 	const retryWithTalisman = useCallback(
 		async (question: string, talisman: TalismanItem) => {
 			const currentAttemptCount = getTodayAttemptCount(question);
-			const boostedRetryCount = currentAttemptCount + talisman.retryBonus;
+			const currentResult = getWhatIfSnapshot().todayResult;
 			const resultDraft = await requestAiSimulation(
 				question,
-				boostedRetryCount,
+				currentAttemptCount,
 				talisman.rarity,
+				currentResult?.rarity,
 			);
 			createRetrySimulation(
 				resultDraft,

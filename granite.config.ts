@@ -5,7 +5,7 @@ export default defineConfig({
 	brand: {
 		displayName: "인생선택",
 		primaryColor: "#3182F6",
-		icon: "",
+		icon: "https://static.toss.im/appsintoss/23443/224cb00a-6ef5-4125-b353-4140af9010a3.png",
 	},
 	web: {
 		host: "localhost",
