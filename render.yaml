@@ -12,6 +12,6 @@ services:
       - key: PYTHON_VERSION
         value: 3.13.5
       - key: OPENAI_MODEL
-        value: gpt-5-nano
+        value: gpt-4.1-mini
       - key: OPENAI_API_KEY
         sync: false

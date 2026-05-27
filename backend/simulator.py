@@ -132,7 +132,7 @@ def simulate(
 
 
 def get_openai_model() -> str:
-    return os.getenv("OPENAI_MODEL", "gpt-5-nano")
+    return os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
 
 
 def simulate_with_openai(
