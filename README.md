@@ -32,6 +32,23 @@ OPENAI_API_KEY=sk-... uvicorn main:app --reload --host 0.0.0.0 --port 8000
 - `OPENAI_MODEL`: 기본값 `gpt-4o-mini`
 - `ALLOW_LOCAL_SIMULATION_FALLBACK=true`: OpenAI 키 없이 개발용 로컬 시뮬레이션 허용
 
+## Render 백엔드 배포
+
+루트의 `render.yaml`로 FastAPI 백엔드를 Render Web Service로 배포할 수 있습니다.
+
+Render Dashboard에서 Blueprint 또는 Web Service를 만들고 이 GitHub repo를 연결합니다.
+
+필수 환경변수:
+
+- `OPENAI_API_KEY`: Render 환경변수로 직접 입력
+- `OPENAI_MODEL`: `gpt-4o-mini`
+
+배포 후 발급된 URL의 `/health`가 `{"status":"ok"}`를 반환하면 프론트 출시 빌드를 다시 만듭니다.
+
+```bash
+VITE_API_BASE_URL=https://your-render-service.onrender.com npm run build
+```
+
 ## 빌드
 
 ```bash
