@@ -132,7 +132,11 @@ def simulate(
 
 
 def get_openai_model() -> str:
-    return os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
+    return os.getenv("OPENAI_MODEL", "gpt-5-nano")
+
+
+def get_openai_reasoning_effort() -> str:
+    return os.getenv("OPENAI_REASONING_EFFORT", "minimal")
 
 
 def simulate_with_openai(
@@ -143,10 +147,12 @@ def simulate_with_openai(
 ) -> SimulationResponse:
     client = OpenAI()
     model = get_openai_model()
+    reasoning_effort = get_openai_reasoning_effort()
 
     try:
         response = client.responses.parse(
             model=model,
+            reasoning={"effort": reasoning_effort},
             input=[
                 {
                     "role": "system",

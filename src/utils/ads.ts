@@ -5,7 +5,7 @@ import {
 
 export const AD_GROUP_IDS = {
 	resultBottomBanner: "ait.v2.live.218b8be77b9a495b",
-	talismanReward: "ait.v2.live.a775dc44d431465e",
+	talismanReward: "ait.v2.live.fbae546fa753439d",
 } as const;
 
 const AD_LOAD_TIMEOUT_MS = 15000;

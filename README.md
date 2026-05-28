@@ -29,7 +29,8 @@ OPENAI_API_KEY=sk-... uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 선택 환경변수:
 
-- `OPENAI_MODEL`: 기본값 `gpt-4.1-mini`
+- `OPENAI_MODEL`: 기본값 `gpt-5-nano`
+- `OPENAI_REASONING_EFFORT`: 기본값 `minimal`
 - `ALLOW_LOCAL_SIMULATION_FALLBACK=true`: OpenAI 키 없이 개발용 로컬 시뮬레이션 허용
 
 ## Render 백엔드 배포
@@ -41,7 +42,8 @@ Render Dashboard에서 Blueprint 또는 Web Service를 만들고 이 GitHub repo
 필수 환경변수:
 
 - `OPENAI_API_KEY`: Render 환경변수로 직접 입력
-- `OPENAI_MODEL`: `gpt-4.1-mini`
+- `OPENAI_MODEL`: `gpt-5-nano`
+- `OPENAI_REASONING_EFFORT`: `minimal`
 
 배포 후 발급된 URL의 `/health`가 `{"status":"ok"}`를 반환하면 프론트 출시 빌드를 다시 만듭니다.
 
