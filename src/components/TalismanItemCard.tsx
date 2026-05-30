@@ -209,7 +209,7 @@ export default function TalismanItemCard({ talisman }: TalismanItemCardProps) {
 							<Paragraph.Text>{talisman.name}</Paragraph.Text>
 						</Paragraph>
 						<span style={{ ...styles.bonus, color: theme.text }}>
-							+{talisman.retryBonus}
+							{talisman.remainingUses}/{talisman.retryBonus}
 						</span>
 					</div>
 					<Paragraph

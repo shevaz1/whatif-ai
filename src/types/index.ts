@@ -62,5 +62,6 @@ export interface TalismanItem {
 	name: string;
 	description: string;
 	retryBonus: number;
+	remainingUses: number;
 	createdAt: string;
 }

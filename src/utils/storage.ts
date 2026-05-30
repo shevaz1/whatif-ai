@@ -62,7 +62,14 @@ function canUseStorage(): boolean {
 function normalizeState(raw: Partial<WhatIfState> | null): WhatIfState {
 	return {
 		results: Array.isArray(raw?.results) ? raw.results : [],
-		talismans: Array.isArray(raw?.talismans) ? raw.talismans : [],
+		talismans: Array.isArray(raw?.talismans)
+			? raw.talismans
+					.filter((item) => item && item.remainingUses !== 0)
+					.map((item) => ({
+						...item,
+						remainingUses: Number(item.remainingUses ?? item.retryBonus ?? 1),
+					}))
+			: [],
 		attendance: {
 			streak: Number(raw?.attendance?.streak ?? 0),
 			bestStreak: Number(raw?.attendance?.bestStreak ?? 0),
@@ -203,6 +210,7 @@ export function createTalismanReward(): WhatIfState {
 		name: meta.name,
 		description: meta.description,
 		retryBonus: meta.retryBonus,
+		remainingUses: meta.retryBonus,
 		createdAt: new Date().toISOString(),
 	};
 	const nextState = {
@@ -216,9 +224,17 @@ export function createTalismanReward(): WhatIfState {
 
 export function consumeTalisman(id: string): void {
 	const state = loadWhatIfState();
+	const nextTalismans = state.talismans
+		.map((item) =>
+			item.id === id
+				? { ...item, remainingUses: Math.max(item.remainingUses - 1, 0) }
+				: item,
+		)
+		.filter((item) => item.remainingUses > 0);
+
 	saveWhatIfState({
 		...state,
-		talismans: state.talismans[0]?.id === id ? [] : state.talismans,
+		talismans: nextTalismans,
 	});
 }
 

@@ -224,7 +224,7 @@ export default function ResultPage() {
 				>
 					<Paragraph.Text>
 						재도전 {retryCount}회 · 행운부적을 쓰면 재시도 보정과 등급 보너스가
-						붙어요.
+						붙어요{talisman ? ` · 부적 ${talisman.remainingUses}회 남음` : "."}
 					</Paragraph.Text>
 				</Paragraph>
 				<div style={styles.rankStack}>
@@ -291,7 +291,7 @@ export default function ResultPage() {
 								: isRetrying
 									? "행운부적으로 다시 점치는 중"
 									: talisman
-										? "행운부적 쓰고 다시 시뮬레이션"
+										? `행운부적 쓰고 다시 시뮬레이션 (${talisman.remainingUses}회 남음)`
 										: "행운부적을 먼저 받아주세요"}
 					</Button>
 					{retryError ? (
